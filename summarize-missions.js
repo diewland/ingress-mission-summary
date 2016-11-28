@@ -2,12 +2,14 @@ var missions = $('.details').map(function(){
   var img = $(this).find('.mission-image').attr('src');
   var title = $(this).find('.mission-title-published,.mission-title-submitted,.mission-title-draft');
   var published = $(title).attr('class').indexOf('published') > 0 ? true : false;
+  var draft = $(title).attr('class').indexOf('draft') > 0 ? true : false;
   var number = $(this).html().match(/[\(\[](.+)\/.+[\)\]]/i);
   number = number ? number[1]*1 : 1;
   return {
     title: $(title).html().trim(),
     number: number,
-    published: published ? 'PUBLISHED' : null,
+    published: published,
+    draft: draft,
     img: img,
   }
 });
@@ -67,9 +69,13 @@ $.each(Object.keys(series).sort(), function(i, k){
   html += `<table class='table'>`;
   html += `<thead><tr><th>#</th><th>Title</th><th style='width: 100px;'>Status</th></tr></thead>`;
   $.each(rr, function(i, r){
-    var status = r.published ?
-                  '<span class="tag is-success">Published</span>' :
-                  '<span class="tag is-danger">Pending</span>';
+    var status = '<span class="tag is-danger">Pending</span>';
+    if(r.published){
+      status = '<span class="tag is-success">Published</span>';
+    }
+    else if(r.draft){
+      status = '<span class="tag is-warning">Draft</span>';
+    }
     html += `<tr><td>`+ r.number +`</td><td>`+ r.title +`</td><td>`+ status +`</td></tr>`;
   });
   html += `</table>`;
@@ -80,5 +86,6 @@ html += `
 </body>
 </html>
 `;
-var win = window.open();
+if(typeof(win) != "undefined"){ win.close(); }
+win = window.open();
 win.document.write(html);
