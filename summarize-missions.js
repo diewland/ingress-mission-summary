@@ -39,17 +39,22 @@ html = `
     -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(100%);
   }
+  .container {
+    max-width: 1300px;
+  }
 </style>
 </head>
 <body>
 <div class='container has-text-centered'>
+<div class='content'>
 `;
 $.each(Object.keys(series).sort(), function(i, k){
   var rr = series[k];
   rr.sort(function(a, b){
     return a.number - b.number;
   });
-  html += `<div class='content'>`;
+  html += `<div class='columns is-desktop'>`;
+  html += `<div class='column'>`;
   html += `<h1>`+ k +`</h1>`;
   var rrr = rr.slice(0).reverse();
   for(var i=1; i<=rrr.length; i++){
@@ -66,6 +71,8 @@ $.each(Object.keys(series).sort(), function(i, k){
       html += '<br />';
     }
   }
+  html += `</div>`;
+  html += `<div class='column'>`;
   html += `<table class='table'>`;
   html += `<thead><tr><th>#</th><th>Title</th><th style='width: 100px;'>Status</th></tr></thead>`;
   $.each(rr, function(i, r){
@@ -80,8 +87,11 @@ $.each(Object.keys(series).sort(), function(i, k){
   });
   html += `</table>`;
   html += `</div>`;
+  html += `</div>`;
 });
 html += `
+</div>
+</div>
 </div>
 </body>
 </html>
